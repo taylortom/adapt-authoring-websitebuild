@@ -1,1 +1,1 @@
-module.exports = require('./lib/UIPluginModule');
+module.exports = require('./lib/WebsiteBuildModule');
