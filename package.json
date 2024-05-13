@@ -1,8 +1,8 @@
 {
-  "name": "adapt-authoring-uimoduletemplate",
+  "name": "adapt-authoring-websitebuild",
   "version": "1.0.0",
-  "description": "Template module for creating UI plugins",
-  "homepage": "https://github.com/taylortom/adapt-authoring-uiplugintemplate",
+  "description": "Module for building a course as a local website",
+  "homepage": "https://github.com/taylortom/adapt-authoring-websitebuild",
   "main": "index.js",
   "dependencies": {
     "adapt-authoring-core": "git+https://github.com/adapt-security/adapt-authoring-core.git"
