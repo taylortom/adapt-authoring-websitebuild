@@ -1,1 +1,1 @@
-module.exports = require('./lib/WebsiteBuildModule');
+export { default } from './lib/WebsiteBuildModule'
