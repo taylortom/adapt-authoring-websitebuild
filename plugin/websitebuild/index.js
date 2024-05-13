@@ -39,7 +39,7 @@ define(function(require) {
         $('.editor-sidebar-publish .publish').removeClass('display-none');
         Origin.Notify.alert({
           type: 'success',
-          text: Origin.l10n.t('app.publishsuccess')
+          text: 'Published successfully'
         });
       }).fail(function (jqXHR, textStatus, errorThrown) {
         Origin.Notify.alert({

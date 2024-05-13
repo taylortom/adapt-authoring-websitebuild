@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "websitePublishDir": {
+      "description": "Path to the published website files",
+      "type": "string"
+    }
+  }
+}
