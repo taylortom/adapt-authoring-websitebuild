@@ -1,47 +1,45 @@
 // LICENCE https://github.com/adaptlearning/adapt_authoring/blob/master/LICENSE
 define(function(require) {
-  var Helpers = require('core/helpers');
   var Origin = require('core/origin');
 
-  Origin.on('origin:dataReady', function init() {
-    Origin.on('editor:contentObject', function(data) {
-      if(data.action !== 'edit') renderPublishButton(data);
-    });
-  });
+  Origin.on('editor:contentObject', data => setTimeout(() => updateButtons(data), 50));
 
-  function renderPublishButton(data) {
-    var viewEventName = 'editor' + data.type[0].toUpperCase() + data.type.slice(1);
-    Origin.once(viewEventName + ':postRender', function() {
-      $('.editor-common-sidebar-download').hide();
-      const $btn = $('<button type="button" class="editor-sidebar-publish action-secondary"><span class="publish">Publish</span><span class="publishing display-none">Publishing...</span></button>');
-      $('.editor-common-sidebar-download').after($btn);
-      $btn.click(handlePublish);
-    });
-  }
+  async function updateButtons(data) {
+    Origin.contentHeader.setButtons(Origin.contentHeader.BUTTON_TYPES.ACTIONS, [{ 
+      items: [
+        {
+          id: 'preview',
+          buttonText: 'Preview site',
+        },
+        {
+          id: 'publish-to-web',
+          buttonText: 'Publish to web',
+          buttonClass: 'action-secondary'
+        }
+      ] 
+    }]);
 
-  function handlePublish(event) {
-    $(event.currentTarget).blur();
-    if($(event.currentTarget).attr('data-isdisabled')) {
-      return Origin.Notify.alert({
+    Origin.on('actions:publish-to-web', async () => {
+      const { SweetAlert } = Origin.Notify.alert({ 
         type: 'info',
-        text: Origin.l10n.t('app.publishdisabled')
+        title: 'Publishing',
+        text: 'Publishing website, please wait.,,' 
       });
-    }
-    $('.editor-sidebar-publish .publish').addClass('display-none');
-    $('.editor-sidebar-publish .publishing').removeClass('display-none');
-
-    $.post('/api/adapt/websitebuild/' + Origin.editor.data.course.get('_id'), function(jqXHR, textStatus, errorThrown) {
-      $('.editor-sidebar-publish .publishing').addClass('display-none');
-      $('.editor-sidebar-publish .publish').removeClass('display-none');
-      Origin.Notify.alert({
-        type: 'success',
-        text: Origin.l10n.t('app.publishsuccess')
-      });
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-      Origin.Notify.alert({
-        type: 'error',
-        text: jqXHR.responseText
-      });
+      SweetAlert.showLoading();
+  
+      try {
+        await $.post('/api/adapt/websitebuild/' + Origin.editor.data.course.get('_id'), () => {
+          Origin.Notify.alert({ 
+            type: 'success', 
+            text: Origin.l10n.t('app.publishsuccess') 
+          });
+        });
+      } catch(e) {
+        Origin.Notify.alert({ 
+          type: 'error', 
+          text: e.responseJSON.message 
+        });
+      }
     });
   }
 });
