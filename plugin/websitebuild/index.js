@@ -2,7 +2,7 @@
 define(function(require) {
   var Origin = require('core/origin');
 
-  Origin.on('editor:contentObject', data => setTimeout(() => updateButtons(data), 50));
+  Origin.on('editor:contentObject', data => setTimeout(() => updateButtons(data), 500));
 
   async function updateButtons(data) {
     Origin.contentHeader.setButtons(Origin.contentHeader.BUTTON_TYPES.ACTIONS, [{ 
